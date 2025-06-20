@@ -41,6 +41,8 @@ input[type="text"] {
     border-radius: 4px; 
     box-sizing: border-box; 
     font-size: 1.1em; 
+    /* Adicionamos uma margem inferior para compensar a remoção do botão */
+    margin-bottom: 20px;
 }
 
 input:focus { 
@@ -48,26 +50,10 @@ input:focus {
     border-color: #007bff; 
 }
 
-button { 
-    width: 100%; 
-    padding: 15px; 
-    background-color: #007bff; 
-    color: white; 
-    border: none; 
-    border-radius: 4px; 
-    font-size: 1.1em; 
-    font-weight: bold; 
-    cursor: pointer; 
-    transition: background-color 0.3s; 
-    margin-top: 20px; 
-}
-
-button:hover { 
-    background-color: #0056b3; 
-}
+/* Os estilos para 'button' e 'button:hover' foram removidos */
 
 #result { 
-    margin-top: 25px; 
+    margin-top: 15px; 
     padding: 15px; 
     border-radius: 4px; 
     font-weight: bold; 
@@ -75,6 +61,7 @@ button:hover {
     align-items: center; 
     justify-content: center; 
     gap: 10px; 
+    min-height: 26px; /* Altura mínima para evitar 'pulos' na interface */
 }
 
 #result img { 

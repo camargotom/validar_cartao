@@ -1,5 +1,3 @@
-/* script.js */
-
 // Espera a página carregar completamente antes de executar o script
 document.addEventListener('DOMContentLoaded', function () {
 
@@ -16,30 +14,26 @@ document.addEventListener('DOMContentLoaded', function () {
     };
 
     const cardLogos = {
-        'Visa': 'https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg',
-        'MasterCard': 'https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg',
-        'American Express': 'https://upload.wikimedia.org/wikipedia/commons/f/fa/American_Express_logo_%282018%29.svg',
-        'Discover': 'https://upload.wikimedia.org/wikipedia/commons/5/57/Discover_Card_logo.svg',
-        'Diners Club': 'https://upload.wikimedia.org/wikipedia/commons/a/a6/Diners_Club_Logo3.svg',
-        'JCB': 'https://upload.wikimedia.org/wikipedia/commons/4/40/JCB_logo.svg',
-        'Elo': 'https://upload.wikimedia.org/wikipedia/commons/d/da/Elo_card_association_logo_-_black_text.svg'
+        'Visa': 'images/visa.png',
+        'MasterCard': 'images/mastercard.png',
+        'American Express': 'images/american-express.png',
+        'Discover': 'images/discover.png',
+        'Diners Club': 'images/diners-club.png',
+        'JCB': 'images/jcb.png',
+        'Elo': 'images/elo.png',
+        'Aura': 'images/aura.png',
+        'Hipercard': 'images/hipercard.png'
     };
-
+    
+    // O algoritmo de Luhn 
     function luhnCheck(numStr) {
-        if (!/^\d+$/.test(numStr)) {
-            return false;
-        }
-
+        if (!/^\d+$/.test(numStr)) return false;
         let sum = 0;
         let shouldDouble = false;
         for (let i = numStr.length - 1; i >= 0; i--) {
             let digit = parseInt(numStr.charAt(i));
-
             if (shouldDouble) {
-                digit *= 2;
-                if (digit > 9) {
-                    digit -= 9;
-                }
+                if ((digit *= 2) > 9) digit -= 9;
             }
             sum += digit;
             shouldDouble = !shouldDouble;
@@ -47,28 +41,27 @@ document.addEventListener('DOMContentLoaded', function () {
         return (sum % 10) === 0;
     }
 
-    const validateBtn = document.getElementById('validateBtn');
+    // Obtendo referências aos elementos da interface
     const cardNumberInput = document.getElementById('cardNumber');
     const resultDiv = document.getElementById('result');
     const resultText = document.getElementById('resultText');
     const cardLogoImg = document.getElementById('cardLogo');
 
-    validateBtn.addEventListener('click', function () {
+    // Função que encapsula a lógica de validação e identificação
+    function validateAndIdentifyCard() {
         const cardNumber = cardNumberInput.value.replace(/[\s-]/g, '');
 
-        resultDiv.style.display = 'none';
-        cardLogoImg.style.display = 'none';
-
-        if (cardNumber.length === 0) {
-            resultText.textContent = 'Por favor, digite o número do cartão.';
-            resultDiv.className = 'error';
-            resultDiv.style.display = 'flex';
+        if (cardNumber.length < 4) {
+            resultDiv.style.display = 'none';
+            cardLogoImg.style.display = 'none';
             return;
         }
+
         if (!/^\d+$/.test(cardNumber)) {
-            resultText.textContent = 'Inválido: O número deve conter apenas dígitos.';
+            resultText.textContent = 'Apenas números são permitidos.';
             resultDiv.className = 'error';
             resultDiv.style.display = 'flex';
+            cardLogoImg.style.display = 'none';
             return;
         }
 
@@ -83,25 +76,28 @@ document.addEventListener('DOMContentLoaded', function () {
 
         if (identifiedBrand) {
             const isValidLuhn = luhnCheck(cardNumber);
+            
             if (isValidLuhn) {
-                resultText.textContent = `Bandeira: ${identifiedBrand} (Número Válido)`;
+                resultText.textContent = `Bandeira: ${identifiedBrand} (Válido)`;
                 resultDiv.className = 'success';
             } else {
-                resultText.textContent = `Bandeira: ${identifiedBrand} (Número Inválido)`;
+                resultText.textContent = `Bandeira: ${identifiedBrand} (Inválido)`;
                 resultDiv.className = 'error';
             }
-
+            
             if (cardLogos[identifiedBrand]) {
                 cardLogoImg.src = cardLogos[identifiedBrand];
                 cardLogoImg.style.display = 'inline-block';
             }
         } else {
-            resultText.textContent = 'Inválido ou Bandeira desconhecida.';
-            if (cardNumber.length < 13 || cardNumber.length > 19) {
-                resultText.textContent += ' Comprimento incorreto.';
-            }
+            resultText.textContent = 'Bandeira desconhecida.';
             resultDiv.className = 'error';
+            cardLogoImg.style.display = 'none';
         }
+
         resultDiv.style.display = 'flex';
-    });
+    }
+
+    // O listener 
+    cardNumberInput.addEventListener('input', validateAndIdentifyCard);
 });
