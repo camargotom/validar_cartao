@@ -50,8 +50,6 @@ input:focus {
     border-color: #007bff; 
 }
 
-/* Os estilos para 'button' e 'button:hover' foram removidos */
-
 #result { 
     margin-top: 15px; 
     padding: 15px; 
